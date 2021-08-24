@@ -1,67 +1,334 @@
 <!DOCTYPE html>
+<html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
+  <meta charset="utf-8">
+  <title>AntarBoboko</title>
+  <meta name="description" content="Sayuran" />
+  <meta name="author" content="formfacade.com" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="https://lh3.googleusercontent.com/a/AATXAJxhi81UGy8Cj5dd3vYKG5JZnURoZ13oSwiSDs2n=s96-c" type="image/x-icon">
+  <link href="/mstore-header2/css/vendor/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="/theme/mstore-header2/theme.css?font=%22Work%20Sans%22%2CHelvetica%2CArial%2Csans-serif&primary=%23E91E63&secondary=%23f5f5f5" rel="stylesheet" media="screen">
+  <style type="text/css">
+    .ff-form{ min-height:calc(100vh - 426px); }
+    .site-logo{ padding:20px 0px; max-width:70%; overflow:hidden; white-space:nowrap; }
+    .ff-logo img{ display:inline; margin-right:5px; width:40px !important; height:auto !important; }
+    .ff-cart-count{ top:-8px !important; left:16px !important; }
+    @media (max-width: 650px) {
+      #pageform .padding-top-2x{ padding-top:0px !important; }
+      .ff-form{ min-height:calc(100vh - 414px); }
+    }
+    @media (min-width: 650px) {
+      #ff-nav-min{ text-align:right; }
+      .main-navigation > .menu > li > a{
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  </style>
 
-    <title>Narrow Jumbotron Template for Bootstrap</title>
+    <meta name="robots" content="noindex, nofollow">
 
-    <!-- Bootstrap core CSS -->
-    <link href="../../css/editor.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" media="screen">
+  <link href="https://formfacade.com/mstore-header2/css/vendor/socicon.min.css" rel="stylesheet" media="screen">
+  <link rel="stylesheet" href="/jstree/themes/default/style.min.css" />
+  
+  <script src="/js/ejs.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-auth.js"></script>
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyCcbdBCI-Kgcz3tE1N4paeF9a-vdi3Uzz8",
+      authDomain: location.hostname=='localhost'?'formfacade.firebaseapp.com':location.hostname,
+      databaseURL: "https://formfacade.firebaseio.com",
+      projectId: "formfacade",
+      storageBucket: "",
+      messagingSenderId: "743872305260",
+      appId: "1:743872305260:web:c5f7c23ccfa724447be049"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <script>
+    FacadeSignin = {
+      params:{"action":"public","userId":"111966557823427834690","page":"all","publishId":"1FAIpQLSe6eeUNtqTIwykzaqO7PtkUxVTPR2mcY12iZGj3o7R2-FY4eA"},
+      query:{},
+      info:{"footer":"@ Matjar Nusantara","language":"en","themePrimary":"#000000","themeSecondary":"#000000","themecolor":"minimal-E91E63","title":"AntarBoboko"},
+      init:function()
+      {
+        var curr = this;
+        firebase.auth().onAuthStateChanged(function(auth){
+          curr.loggedIn = auth?auth.providerData[0]:null;
+          if(curr.loggedIn && curr.loggedIn.uid==curr.params.userId)
+          {
+            console.log('Logged in as '+curr.loggedIn.uid);
+          }
+          else if(curr.params.action=='edit'||curr.params.action=='task')
+          {
+            if(location.hostname=='localhost') return;
+            var repath = '/restrict'+window.location.pathname;
+            location.href = repath;
+          }
+        });
+      },
+      signIn: function()
+      {
+        var curr = this;
+        var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+          curr.init();
+        }).catch(function(err){
+          console.error('fail', err);
+          curr.init();
+        });
+      }
+    }
+    FacadeSignin.init();
+  </script>
 
-    <!-- Custom styles for this template -->
-    <link href="narrow-jumbotron.css" rel="stylesheet">
-  </head>
-
-  <body style="background-color: rgb(168, 255, 168);">
-
-    <div class="container">
-      <div class="header clearfix">
-        <nav>
-          <ul class="nav nav-pills float-right">
-            <li class="nav-item">
-              
-            </li>
-            <li class="nav-item">
-              
-            </li>
-            <li class="nav-item">
-              
-            </li>
-          </ul>
-        </nav>
-        <h3 class="text-muted">Anter Boboko</h3>
-      </div>
-
-      <div class="jumbotron" style="background-color: rgb(0, 0, 0); color: rgb(255, 255, 255);">
-        <h1 class="display-3">Jumbotron heading</h1>
-        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-        <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p>
-      </div>
-
-      <div class="row marketing">
-        <div class="col-lg-6">
-          <h4>Katalog</h4>
-          
-
-          
-          <p></p><div class="form-group" style=""><label>Choose an option </label><select class="form-control"><option value="value1">1</option><option value="value2">2</option><option value="value3">3</option></select></div><div class="form-group" style=""><label>Choose an option </label><select class="form-control"><option value="value1">1</option><option value="value2">2</option><option value="value3">3</option></select></div><div class="form-group" style=""><label>Choose an option </label><select class="form-control"><option value="value1">1</option><option value="value2">2</option><option value="value3">3</option></select></div><div class="form-group" style=""><label>Choose an option </label><select class="form-control"><option value="value1">1</option><option value="value2">2</option><option value="value3">3</option></select></div><form style=""></form>Jengkol 250gr / Pack.<select class="form-control">Choose an option <option value="value1">1</option><option value="value2">2</option><option value="value3">3</option></select><div class="form-group" style=""></div><p></p>
-
-          
-          
+  <div id="LoginAlert" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Restricted Access</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <div class="modal-body">
+          <p>You have to login to access this page.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="FacadeSignin.signIn()" data-dismiss="modal">Proceed</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2J8RRM69MY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2J8RRM69MY');
+  </script>
+
+
+  <style>
+    .ff-form td{ font-size:smaller; }
+    #viewform select{ -webkit-appearance: menulist; appearance:menulist; }
+    .ff-form select{ -webkit-appearance: menulist; appearance:menulist; }
+
+    #ff-compose{ padding:20px; border-radius:.25rem; 
+      background-color:#f4f7f8;
+    }
+    .ff-form .form-check-input{ margin-top:6px; }
+    .ff-form .form-check-label{ padding-left:5px; }
+    .ff-form .form-check-other{ padding-top:5px; }
+    .ff-form .form-check-other input[type=text]{ margin-left:5px; }
+    .ff-form .form-check-other input[type=radio]{ margin-top:15px; }
+    .ff-form .form-check-other input[type=checkbox]{ margin-top:15px; }
+    .ff-html-row img{ display:inline; }
+    .ff-html-row td{ border-bottom-width:0px; }
+    
+    .ff-edittheme{ display:none !important; }
+    
+    
+      .background{ background-color:#f5f5f5; }
+      .font{ font-family:"Work Sans",Helvetica,Arial,sans-serif; }
+    
+    #EditModal select{ -webkit-appearance:menulist; appearance:menulist; }
+    .trial-alert{ text-align:center; padding:1.75rem 1.25rem; }
+  </style>
+
+
+
+  <div class="modal fade" id="ShareModal" tabindex="-1" role="dialog" style="z-index:9999;">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+  
+  
+  <script>
+    shareFacade = {
+      params:{"action":"public","userId":"111966557823427834690","page":"all","publishId":"1FAIpQLSe6eeUNtqTIwykzaqO7PtkUxVTPR2mcY12iZGj3o7R2-FY4eA"},
+      query:{},
+      template: {"share":"<% \r\n  var isNeartail = formFacade.data.facade&&formFacade.data.facade.neartail;\r\n  var isWhatsapp = formFacade.data.facade&&formFacade.data.facade.whatsapp;\r\n  var shorturl = 'https://formfaca.de/sm/'+short.shortId;\r\n  if(perma.slug && perma.publishId==params.publishId)\r\n    shorturl = 'https://neartail.com/'+perma.country+'/'+perma.slug;\r\n  else if(isNeartail)\r\n    shorturl = 'https://formfaca.de/sm/'+short.shortId;\r\n  else if(isWhatsapp)\r\n    shorturl = 'https://whatstarget.com/sm/'+short.shortId;\r\n%>\r\n<div class=\"modal-header\">\r\n  <h5 class=\"modal-title\"><%-formFacade.lang('Share this form with others')%></h5>\r\n  <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\r\n    <span aria-hidden=\"true\">&times;</span>\r\n  </button>\r\n</div>\r\n<div class=\"modal-body\">\r\n<form>\r\n    <div class=\"form-group\">\r\n      <input type=\"text\" class=\"form-control\" name=\"site\" value=\"<%-shorturl%>\"/>\r\n    </div>\r\n</form>\r\n</div>\r\n<div class=\"modal-footer\">\r\n  <% if(params.action=='edit' && isNeartail){ %>\r\n    <% if(perma.publishId==params.publishId){ %>\r\n      <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">\r\n        <%-formFacade.lang('Done')%>\r\n      </button>\r\n    <% } else{ %>\r\n    <button type=\"button\" class=\"btn btn-primary\" onclick=\"shareFacade.showPermalink()\">\r\n      Get Permalink\r\n    </button>\r\n    <% } %>\r\n  <% } else{ %>\r\n    <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">\r\n      <%-formFacade.lang('Done')%>\r\n    </button>\r\n  <% } %>\r\n</div>\r\n","permalink":"<% \r\n  var isNeartail = formFacade.data.facade&&formFacade.data.facade.neartail;\r\n  var cns = countries.map(cn=>cn.toLowerCase()).sort();\r\n  cns.push('zz');\r\n  var selcn = perma.country?perma.country:(country?country.toLowerCase():'zz');\r\n%>\r\n<div class=\"modal-header\">\r\n  <h5 class=\"modal-title\">\r\n    <% if(perma.slug){ %>\r\n      Linked to <a href=\"/<%-perma.country%>/<%-perma.slug%>\" target=\"_blank\">another form</a>.\r\n      Switch to this form?\r\n    <% } else{ %>\r\n      Create permanent link\r\n    <% } %>\r\n  </h5>\r\n  <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\r\n    <span aria-hidden=\"true\">&times;</span>\r\n  </button>\r\n</div>\r\n<style>\r\n    .modal-body b{ font-weight:400; font-size:16px; }\r\n    .modal-body .infield{ font-size:16px; height:28px; border-width: 0px 0px 1.2px 0px; }\r\n</style>\r\n<div class=\"modal-body\">\r\n  <form id=\"permaform\">\r\n    <b>https://neartail.com/</b>\r\n    <select name=\"country\" class=\"infield\" style=\"width:50px;\" required>\r\n    <% cns.forEach(function(cn){ %>\r\n      <option <%-cn==selcn?'selected':''%>>\r\n        <%-cn%>\r\n      </option>\r\n    <% }) %>\r\n    </select>\r\n    <b>/</b>\r\n    <input name=\"slug\" type=\"text\" class=\"infield\" style=\"width:280px;\" \r\n      placeholder=\"Store name. Can't be changed once created.\" \r\n      title=\"Min 8 characters. Only lower-case letters, numbers & hypen allowed.\"\r\n      oninvalid=\"this.setCustomValidity(this.title)\"\r\n      oninput=\"this.setCustomValidity('')\" value=\"<%-perma.slug%>\" <%-perma.slug?'readonly':''%>\r\n      pattern=\"^[a-z0-9-]+$\" minlength=\"8\" required>\r\n  </form>\r\n</div>\r\n<div class=\"modal-footer\">\r\n  <button type=\"button\" class=\"btn btn-primary\" \r\n    onclick=\"shareFacade.createPermalink(document.getElementById('permaform'))\">\r\n    Create\r\n  </button>\r\n</div>\r\n"},
+      perma:{},
+      country:'ID',
+      countries:["AF","AX","AL","DZ","AS","AD","AO","AI","AQ","AG","AR","AM","AW","AU","AT","AZ","BS","BH","BD","BB","BY","BE","BZ","BJ","BM","BT","BO","BA","BW","BV","BR","IO","BN","BG","BF","BI","KH","CM","CA","CV","KY","CF","TD","CL","CN","CX","CC","CO","KM","CG","CD","CK","CR","CI","HR","CU","CY","CZ","DK","DJ","DM","DO","EC","EG","SV","GQ","ER","EE","ET","FK","FO","FJ","FI","FR","GF","PF","TF","GA","GM","GE","DE","GH","GI","GR","GL","GD","GP","GU","GT","GG","GN","GW","GY","HT","HM","VA","HN","HK","HU","IS","IN","ID","IR","IQ","IE","IM","IL","IT","JM","JP","JE","JO","KZ","KE","KI","KR","KW","KG","LA","LV","LB","LS","LR","LY","LI","LT","LU","MO","MK","MG","MW","MY","MV","ML","MT","MH","MQ","MR","MU","YT","MX","FM","MD","MC","MN","ME","MS","MA","MZ","MM","NA","NR","NP","NL","AN","NC","NZ","NI","NE","NG","NU","NF","MP","NO","OM","PK","PW","PS","PA","PG","PY","PE","PH","PN","PL","PT","PR","QA","RE","RO","RU","RW","BL","SH","KN","LC","MF","PM","VC","WS","ST","SA","SN","RS","SC","SL","SG","SK","SI","SB","SO","ZA","GS","ES","LK","SD","SR","SJ","SZ","SE","CH","SY","TW","TJ","TZ","TH","TL","TG","TK","TO","TT","TN","TR","TM","TC","TV","UG","UA","AE","GB","US","UM","UY","UZ","VU","VE","VN","VG","VI","WF","EH","YE","ZM","ZW"],
+      render: function()
+      {
+        var curr = this;
+        var userId = curr.params.userId;
+        var publishId = curr.params.publishId;
+        if(!userId || !publishId) return alert('No user or form found');
+        return jQuery.get('https://formfacade.com/shortid/'+userId+'/form/'+publishId).promise().then(function(jso){
+          curr.short = jso;
+          var mhtml = ejs.render(curr.template.share, curr);
+          jQuery('#ShareModal .modal-content').html(mhtml);
+          jQuery('#ShareModal').modal({backdrop:'static', keyboard:false});
+        });
+      },
+      showPermalink: function()
+      {
+        var mhtml = ejs.render(this.template.permalink, this);
+        jQuery('#ShareModal .modal-content').html(mhtml);
+      },
+      createPermalink: function(frm)
+      {
+        var curr = this;
+        if(frm.reportValidity())
+        {
+          var jso = {
+            country:jQuery(frm.country).val(), slug:jQuery(frm.slug).val(), 
+            userId:this.params.userId, publishId:this.params.publishId
+          };
+          firebase.database().ref('/perma/'+jso.slug).once('value').then(function(snap){
+            var sval = snap.val();
+            if(sval && sval.userId && sval.userId!=curr.params.userId)
+            {
+              frm.slug.title = jso.slug+' is taken. Pick another name.';
+              frm.slug.setCustomValidity(frm.slug.title);
+              frm.reportValidity();
+              return;
+            }
+            var prms = [
+              firebase.database().ref('/perma/'+jso.slug).update(jso),
+              firebase.database().ref('/user/'+curr.params.userId+'/perma').update(jso)
+            ];
+            Promise.all(prms).then(function(){
+              curr.perma = jso;
+              curr.render();
+            });
+          });
+        }
+      }
+  }
+  </script>
+  
+
+
+  
+
+</head>
+<body class="font">
+
+  <div class="page-wrapper">
+
+
+    
+    <header class="navbar navbar-sticky">
+
+      <a href="javascript:formFacade.directtoSection('root')" class="site-logo visible-desktop ff-logo">
         
-      <form style=""><div class="form-group"></div></form><form style=""><div class="form-group"></div></form><div class="form-group" style=""><label>Your response:</label><textarea class="form-control"></textarea></div></div>
+        AntarBoboko
+      </a>
+      <a href="javascript:formFacade.directtoSection('root')" class="site-logo visible-mobile ff-logo">
+        
+        AntarBoboko
+      </a>
 
-      <footer class="footer">
-        <p>© Matjar Nusantara</p>
-      </footer>
+      
+        
+        
+          <nav id="ff-nav-min" class="main-navigation text-center">
+            <ul class="menu">
+              
+                    <li class="">
+                      <a href="javascript:void(0)" 
+                        onclick="formFacade.directtoSection('root'); document.querySelector('.mobile-menu-toggle').click();">
+                        Sayuran
+                      </a>
+                    </li>
+              
+            </ul>
+          </nav>
+          <div class="toolbar">
+            <div class="inner">
+              <a href="javascript:void(0)" class="mobile-menu-toggle"><i class="material-icons">menu</i></a>
+            </div>
+          </div>
+        
+      
 
-    </div> <!-- /container -->
+    </header>
+
+
+    
+    <section id="pageform" class="noUi-background"
+      style=" background-size:contain; background-position:center top;background-repeat:no-repeat;">
+      <div class="container padding-top-2x">
+        
+        <div class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-10" id="ff-compose" >
+            <h4 style="min-height:380px; padding-top:200px; text-align:center;">Please wait...</h4>
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+        
+        
+      </div>
+    </section>
+
+
+    
+    <footer class="footer">
+      <div class="column">
+        <p class="text-center">
+          <img src="https://lh3.googleusercontent.com/a/AATXAJxhi81UGy8Cj5dd3vYKG5JZnURoZ13oSwiSDs2n=s96-c" style="margin:auto; border-radius:50%; width:60px; height:auto; border:solid 2px #fff;"/>
+        </p>
+        <p class="text-sm">
+	        <span>@ Matjar Nusantara</span>
+	        
+        </p>
+        <p class="copyright">
+          © 2021. 
+          
+              Powered by 
+              
+                <a href="https://neartail.com">Neartail</a>.
+              
+          
+        </p>
+      </div>
+    </footer>
+
+    
+
+
+  </div>
+
+  <script src="/mstore-header2/js/vendor/jquery-2.1.4.min.js"></script>
+  <script src="/mstore-header2/js/vendor/bootstrap.min.js"></script>
+  <script src="/mstore-header2/js/scripts.js"></script>
+
+  
+
+
+
+
+  
+  <script async defer src="/include/111966557823427834690/form/1FAIpQLSe6eeUNtqTIwykzaqO7PtkUxVTPR2mcY12iZGj3o7R2-FY4eA/bootstrap.js?div=ff-compose"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    var pisecret = urlParams.get('payment_intent_client_secret');
+    if(!pisecret)
+    {
+      jQuery.ajax({
+        url:'/include/111966557823427834690/form/1FAIpQLSe6eeUNtqTIwykzaqO7PtkUxVTPR2mcY12iZGj3o7R2-FY4eA/bootstrap.js?div=ff-compose',
+        dataType:'script', headers:{'flushcache':'yes'}, success:function(data){}
+      });
+    }
+  </script>
   
 
 </body>
+
 </html>
